@@ -11,10 +11,6 @@ services:
       context: ./nginx # Relative path to the context directory (This is for Machines)
     ports:
       - "3050:80"
-    networks:
-      - ${NETWORK_NAME}
-    # env_file:
-      # - nginx.env
 
   api:
     build:
@@ -23,8 +19,6 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
-    networks:
-      - ${NETWORK_NAME}
     
 
   client:
@@ -37,11 +31,4 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
-    networks:
-      - ${NETWORK_NAME}
       
-networks: 
-  ${NETWORK_NAME}:
-    # Use environment variable to set the network name
-    name: ${NETWORK_NAME} 
-    driver: bridge
