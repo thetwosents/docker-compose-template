@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile # Relative path to the Dockerfile
       context: ./nginx # Relative path to the context directory (This is for Machines)
     ports:
-      - "3050:80"
+      - "8000:80"
 
   api:
     build:
