@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  nginx: # Used for routing traffic to the application
+    depends_on:
+      - api 
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile # Relative path to the Dockerfile
+      context: ./nginx # Relative path to the context directory (This is for Machines)
+    ports:
+      - "3050:80"
+    networks:
+      - ${NETWORK_NAME}
+    # env_file:
+      # - nginx.env
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: "./server"
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    networks:
+      - ${NETWORK_NAME}
+    
+
+  client:
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    networks:
+      - ${NETWORK_NAME}
+      
+networks: 
+  ${NETWORK_NAME}:
+    # Use environment variable to set the network name
+    name: ${NETWORK_NAME} 
+    driver: bridge
